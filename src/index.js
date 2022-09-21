@@ -7,6 +7,9 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import $ from 'jquery';
+import AuthenContextProvider from './context/AuthenContext';
+
+
 window.jQuery = window.$ = $;
 require('bootstrap');
 
@@ -14,7 +17,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthenContextProvider>
+        <App />
+      </AuthenContextProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

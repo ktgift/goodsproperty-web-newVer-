@@ -1,14 +1,42 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuthen } from "../context/AuthenContext";
+import { useError } from "../context/ErrorContext";
 import RegisterPage from "../pages/RegisterPage";
 
-function LoginForm({ open, closeModal }) {
+
+
+function LoginForm({ closeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false); 
 
-  const handleSubmitLogin = e => {
-    e.preventDefault();
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+
+  const { login, user } = useAuthen(); 
+  const { setError } = useError()
+
+  const handleSubmitLogin = async e => {
+    try {
+      e.preventDefault();
+  
+      if(!email) {
+        return setEmailError('กรุณากรอกอีเมล');
+      }
+  
+      if(!password) {
+        return setPasswordError('กรุณากรอกรหัสผ่าน')
+      }
+  
+      await login({email, password});
+
+      closeModal();
+
+    } catch(err) {
+      console.log(err)
+      setError(err.response.data.message);
+    }
   }
 
   const handleShowPassword = () => {
@@ -19,26 +47,44 @@ function LoginForm({ open, closeModal }) {
     <>
       <form onSubmit={handleSubmitLogin}>
         <div className="row">
-            <div className="col-12 mb-3">
-            <input
-                type="email"
-                className="input-m"
-                id="InputEmail"
-                placeholder="อีเมล"
-                value={email}
-                onChange={(e)=>setEmail(e.target.value)}
-                // pattern="/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i"
-            />
+            <div className="col-12 mb-1">
+              <input
+                  type="email"
+                  className={`input-m ${ emailError ? "isInvalid" : ""}`}
+                  id="InputEmail"
+                  placeholder="อีเมล"
+                  value={email}
+                  onChange={(e)=>setEmail(e.target.value)}
+                  // pattern="/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i"
+              />
+            </div>
+            <div className="col-12 mb-2">
+              <p
+                  className={`${
+                    emailError ? "text-danger " : "font-body"
+                  }  text-left ms-5`}
+                >
+                  {emailError}
+              </p>
             </div>
             <div className="col-12 mb-3">
             <input
                 type={showPassword ? "text" : "password"}
-                className="input-m"
+                className={`input-m ${ passwordError ? "isInvalid" : ""}`}
                 id="InputPassword"
                 placeholder="รหัสผ่าน"
                 value={password}
                 onChange={(e)=>setPassword(e.target.value)}
             />
+            </div>
+            <div className="col-12 mb-2">
+              <p
+                  className={`${
+                    passwordError ? "text-danger " : "font-body"
+                  }  text-left ms-5`}
+                >
+                  {passwordError}
+              </p>
             </div>
         </div>
         <div className="row gx-4">

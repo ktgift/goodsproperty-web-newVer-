@@ -122,14 +122,6 @@ ul li {
   font-size: 0.875rem;
 }
 
-.input-s:hover {
-  border: .25rem solid hsla(0, 0%, 60%, 0.3);
-}
-
-.input-m:hover {
-  border: .25rem solid hsla(0, 0%, 60%, 0.3);
-}
-
 .isInvalid {
   border: 0.063rem solid red;
 }

@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthen } from "../context/AuthenContext";
+import { useError } from "../context/ErrorContext";
 import logoBlack from "../images/logo_black.png";
 
 function RegisterPage() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const [phonenumber, setPhonenumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -19,64 +20,81 @@ function RegisterPage() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmError, setConfirmError] = useState("");
-  
 
   const { register } = useAuthen();
+  const { setError } = useError()
+
+  const navigate = useNavigate()
 
   const handleSubmitLogin = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
 
-    if (!firstname || firstname.match(/^[0-9]*$/)) {
-      return setFirstnameError("กรุณากรอกชื่อ หรือใช้ชื่อเป็นตัวอักษร");
-    } else {
-      setFirstnameError(false);
-      // setFirstname(firstname)
+      if (!firstname || firstname.match(/^[0-9]*$/)) {
+        return setFirstnameError("กรุณากรอกชื่อ หรือใช้ชื่อเป็นตัวอักษร");
+      } else {
+        setFirstnameError(false);
+        // setFirstname(firstname)
+      }
+
+      if (!lastname || lastname.match(/^[0-9]*$/)) {
+        return setLastnameError("กรุณากรอกนามสกุล หรือใช้นามสกุลเป็นตัวอักษร");
+      } else {
+        setLastnameError(false);
+      }
+
+      if (!phoneNumber || !phoneNumber.match(/^[0-9]*$/)) {
+        return setPhoneError("กรุณากรอกเบอร์โทร หรือกรอกเป็นตัวเลข");
+      } else {
+        setPhoneError(false);
+      }
+
+      if (!email) {
+        return setEmailError("กรุณากรอกอีเมล");
+      } else if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
+        return setEmailError("รูปแบบอีเมลไม่ถูกต้อง");
+      } else {
+        setEmailError(false);
+      }
+
+      if (!password) {
+        return setPasswordError("กรุณากรอกรหัสผ่าน");
+      } else if (password.length < 8) {
+        return setPasswordError("ใช้อักษระ 8 ตัวขึ้นไป");
+      } else {
+        setPasswordError(false);
+      }
+
+      if (!confirmPassword) {
+        return setPasswordError("ยืนยันรหัสผ่าน");
+      } else if (password !== confirmPassword) {
+        return setPasswordError("รหัสผ่านไม่ตรงกัน");
+      } else {
+        setConfirmError(false);
+      }
+
+      await register({
+        firstname,
+        lastname,
+        phoneNumber,
+        email,
+        password,
+        confirmPassword,
+      });
+
+      navigate('/')
+
+      setFirstname('');
+      setLastname('');
+      setPhoneNumber('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+
+    } catch (err) {
+      console.log(err)
+      setError(err.response.data.message)
     }
-
-    if (!lastname || lastname.match(/^[0-9]*$/)) {
-      return setLastnameError("กรุณากรอกนามสกุล หรือใช้นามสกุลเป็นตัวอักษร");
-    } else {
-      setLastnameError(false);
-    }
-
-    if (!phonenumber || !phonenumber.match(/^[0-9]*$/)) {
-      return setPhoneError("กรุณากรอกเบอร์โทร หรือกรอกเป็นตัวเลข");
-    } else {
-      setPhoneError(false);
-    }
-
-    if (!email) {
-      return setEmailError("กรุณากรอกอีเมล");
-    } else if (!email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i)) {
-      return setEmailError("รูปแบบอีเมลไม่ถูกต้อง");
-    } else {
-      setEmailError(false);
-    }
-
-    if (!password) {
-      return setPasswordError("กรุณากรอกรหัสผ่าน");
-    } else if (password.length < 8) {
-      return setPasswordError("ใช้อักษระ 8 ตัวขึ้นไป");
-    } else {
-      setPasswordError(false);
-    }
-
-    if(!confirmPassword) {
-      return setPasswordError('ยืนยันรหัสผ่าน')
-    } else if (password !== confirmPassword) {
-      return setPasswordError('รหัสผ่านไม่ตรงกัน')
-    } else {
-      setConfirmError(false)
-    }
-
-    await register({
-      firstname,
-      lastname,
-      phonenumber,
-      email,
-      password,
-      confirmPassword
-    });
   };
 
   const handleShowPassword = () => {
@@ -125,9 +143,13 @@ function RegisterPage() {
             </div>
             <div className="row">
               <div className="col-12">
-              <p className={`${firstnameError ? "text-danger " : "font-body"}  text-left ms-5`}>
+                <p
+                  className={`${
+                    firstnameError ? "text-danger " : "font-body"
+                  }  text-left ms-5`}
+                >
                   {firstnameError}
-              </p>
+                </p>
               </div>
             </div>
 
@@ -144,31 +166,38 @@ function RegisterPage() {
             </div>
             <div className="row">
               <div className="col-12">
-                <p className={`${lastnameError ? "text-danger " : "font-body"}  text-left ms-5`}>
-                    {lastnameError}
+                <p
+                  className={`${
+                    lastnameError ? "text-danger " : "font-body"
+                  }  text-left ms-5`}
+                >
+                  {lastnameError}
                 </p>
               </div>
             </div>
-            
+
             <div className="row">
               <div className="col-12">
                 <input
                   className={`input-s ${phoneError ? "isInvalid" : ""} mb-1`}
                   type="text"
                   placeholder="เบอร์โทรศัพท์"
-                  value={phonenumber}
-                  onChange={(e) => setPhonenumber(e.target.value)}
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                 />
               </div>
             </div>
             <div className="row">
               <div className="col-12">
-                <p className={`${phoneError ? "text-danger " : "font-body"}  text-left ms-5`}>
-                    {phoneError}
+                <p
+                  className={`${
+                    phoneError ? "text-danger " : "font-body"
+                  }  text-left ms-5`}
+                >
+                  {phoneError}
                 </p>
               </div>
             </div>
-
 
             <div className="row">
               <div className="col-12">
@@ -183,29 +212,33 @@ function RegisterPage() {
             </div>
             <div className="row">
               <div className="col-12">
-                <p className={`${emailError ? "text-danger " : "font-body"}  text-left ms-5`}>
-                    {emailError}
+                <p
+                  className={`${
+                    emailError ? "text-danger " : "font-body"
+                  }  text-left ms-5`}
+                >
+                  {emailError}
                 </p>
               </div>
             </div>
 
-
             <div className="row">
               <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                 <input
-                  className={`input-s ${passwordError ? "isInvalid" : ""} mb-1 `}
-                  style={{ float: "right"}}
+                  className={`input-s ${
+                    passwordError ? "isInvalid" : ""
+                  } mb-1 `}
+                  style={{ float: "right" }}
                   type={showPassword ? "text" : "password"}
                   placeholder="รหัสผ่าน"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                
               </div>
               <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                 <input
                   className={`input-s ${confirmError ? "isInvalid" : ""} mb-1`}
-                  style={{ float: "left"}}
+                  style={{ float: "left" }}
                   type={showPassword ? "text" : "password"}
                   placeholder="ยืนยันรหัสผ่าน"
                   value={confirmPassword}
@@ -215,9 +248,13 @@ function RegisterPage() {
             </div>
             <div className="row">
               <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-              <p className={`${passwordError ? "text-danger "  :  "font-body"}  text-left ms-5`}>
+                <p
+                  className={`${
+                    passwordError ? "text-danger " : "font-body"
+                  }  text-left ms-5`}
+                >
                   {passwordError ? passwordError : "ใช้อักษระ 8 ตัวขึ้นไป"}
-              </p>
+                </p>
               </div>
             </div>
             <div className="row justify-content-left ">

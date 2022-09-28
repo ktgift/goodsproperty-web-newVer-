@@ -9,6 +9,7 @@ import reportWebVitals from "./reportWebVitals";
 import $ from "jquery";
 import AuthenContextProvider from "./context/AuthenContext";
 import ErrorContextProvider from "./context/ErrorContext";
+import SearchContextProvider from "./context/SearchContext";
 
 window.jQuery = window.$ = $;
 require("bootstrap");
@@ -18,9 +19,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ErrorContextProvider>
-        <AuthenContextProvider>
-          <App />
-        </AuthenContextProvider>
+        <SearchContextProvider>
+          <AuthenContextProvider>
+            <App />
+          </AuthenContextProvider>
+        </SearchContextProvider>
       </ErrorContextProvider>
     </BrowserRouter>
   </React.StrictMode>

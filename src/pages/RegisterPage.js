@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Wave from "../components/Wave";
 import { useAuthen } from "../context/AuthenContext";
 import { useError } from "../context/ErrorContext";
-import logoBlack from "../images/logo_black.png";
+import logoHomeW from "../images/LOGO_homeWhite.png";
 
 function RegisterPage() {
   const [firstname, setFirstname] = useState("");
@@ -104,11 +105,12 @@ function RegisterPage() {
   return (
     <>
       {/* header */}
-      <nav className="navbar navbar-lg navbar-color">
+      <div>
+      <nav className="navbar navbar-lg navbar-color" >
         <div className="container-fluid">
           <div className="ms-1 pt-1 py-1">
             <Link className="navbar-brand" to="/">
-              <img src={logoBlack} height={40} />
+              <img src={logoHomeW} height={40} />
             </Link>
             <Link className="navbar-brand ms-4 font-title" to="/">
               หน้าหลัก
@@ -116,6 +118,7 @@ function RegisterPage() {
           </div>
         </div>
       </nav>
+      </div>
       {/* form */}
       <div className="container-fluid">
         <form
@@ -289,6 +292,10 @@ function RegisterPage() {
           </div>
         </form>
       </div>
+
+      {/* แต่งสี */}
+      <Wave/>
+
     </>
   );
 }

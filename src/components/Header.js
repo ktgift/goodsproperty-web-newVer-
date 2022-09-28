@@ -5,11 +5,11 @@ import { useAuthen } from "../context/AuthenContext";
 import logoBlack from "../images/logo_black.png";
 import LoginForm from "./LoginForm";
 
-function Header() {
+function Header({ idParam }) {
   const { user, logout } = useAuthen();
+
   const modalEl = useRef();
   const [modal, setModal] = useState("");
-
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -34,6 +34,7 @@ function Header() {
   //     handleClickModalLogin();
   //   }
   // };
+
   const handleClickPost = (user) => {
     if (!user) {
       handleClickModalLogin();
@@ -50,18 +51,18 @@ function Header() {
             <Link className="navbar-brand" to="/">
               <img src={logoBlack} height={40} />
             </Link>
-            <Link className="navbar-brand ms-4 font-title" to="/sale">
+            <Link className={`navbar-brand ms-4 ${idParam === "sale" ? "text-orange" : " "} font-title `} to="/sale/sale">
               ซื้อ
             </Link>
-            <Link className="navbar-brand ms-4 font-title" to="/rent">
+            <Link className={`navbar-brand ms-4 ${idParam === "rent" ? "text-orange" : " "} font-title `} to="/rent/rent">
               เช่า
             </Link>
             <button
               className="btn btn-form-outline pt-0 font-title"
               type="button"
               onClick={() =>
-                // handleClickPost("http://localhost:3000/post-property1", user)
                 handleClickPost(user)
+                // handleClickPost("http://localhost:3000/post-property1", user)
               }
             >
               ลงประกาศ
@@ -72,7 +73,7 @@ function Header() {
               // {/* แสดงหลัง login */}
               <>
                 <button
-                  className="btn btn-outline-secondary dropdown-toggle"
+                  className="btn btn-orange dropdown-toggle"
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"

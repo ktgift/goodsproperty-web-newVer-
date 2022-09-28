@@ -17,7 +17,7 @@ function AuthenContextProvider({ children }) {
                 if(token) {
                     const resUser = await axios.get('/users/userlogin');
                     setUser(resUser.data.user)
-                    console.log(resUser.data.user)
+                    // console.log(resUser.data.user)
                 }
             } catch(err) {
                 removeToken();

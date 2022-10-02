@@ -101,11 +101,22 @@ ul li {
   position: relative;
 }
 
+.m-top-34 {
+  margin-top: 2.125rem;
+}
+
 .bg-search {
   width: 60%;
   z-index: 2;
   background: rgba(0, 54, 130, 0.8);
   border-radius: 0.625rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.position-center {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -154,6 +165,29 @@ ul li {
   border-radius: 0.625rem;
   box-shadow: 0 0 30px rgba(86, 207, 248, 0.8);
   z-index: 5;
+}
+
+.div-border-up-pic {
+  border: 0.063rem solid var(--grey-medium) ;
+  background-color: #fff;
+  border-radius: 0.625rem;
+  z-index: 5;
+}
+
+.bd-radius {
+  border-radius: 0.625rem;
+}
+
+.bg-gray-btn {
+  border-radius: 0.75rem;
+  background-color: #f2f2f2;
+}
+.h-10{
+  height: 0.625rem;
+}
+
+.w-10 {
+  width: 0.625rem;
 }
 
 svg {
@@ -216,6 +250,18 @@ svg {
   font-size: 0.875rem;
 }
 
+.font-18 {
+  font-size: 1.125rem;
+}
+
+.font-24{
+  font-size: 1.5rem;
+}
+
+.font-32{
+  font-size: 2rem;
+}
+
 .text-right{
   text-align: right;
 }
@@ -241,4 +287,8 @@ svg {
 
 .text-white {
   color: #fff;
+}
+
+.text-gray {
+  color: rgb(171, 170, 170);
 }

@@ -20,8 +20,9 @@ function SearchDiv() {
   const [tambonInAmphure, setTambonInAmphure] = useState([]);
 
 
-  console.log(selectObjective);
-  console.log(selectResidence);
+  // console.log(selectObjective);
+  // console.log(selectResidence);
+  // console.log(selectCommercail);
 
   // สร้างรายการจังหวัด
   const optionProvinces = province?.map((el) => (
